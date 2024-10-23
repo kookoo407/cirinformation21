@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع نصائح السيارات - تسجيل الدخول</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --background: #ecf0f1;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(45deg, #2c3e50, #3498db);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .background-animation {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            background: linear-gradient(45deg, #2c3e50, #3498db);
+            filter: blur(50px);
+            animation: backgroundMove 15s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .container {
+            position: relative;
+            width: 400px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px var(--shadow-color);
+            padding: 40px;
+            z-index: 1;
+        }
+
+        .login-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .tab-btn.active {
+            color: var(--secondary-color);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--secondary-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: var(--secondary-color);
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .guest-btn {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .guest-btn a {
+            color: white;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .guest-btn a:hover {
+            color: var(--secondary-color);
+        }
+
+        .form-container > div {
+            display: none;
+        }
+
+        .form-container > div.active {
+            display: block;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .social-icons i {
+            margin: 0 10px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .social-icons i:hover {
+            color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+    <div class="background-animation"></div>
+    <div class="container">
+        <div class="login-tabs">
+            <button class="tab-btn active" onclick="switchTab('user')">تسجيل دخول</button>
+            <button class="tab-btn" onclick="switchTab('admin')">المشرفون</button>
+        </div>
+
+        <div class="form-container">
+            <!-- نموذج تسجيل دخول المستخدم -->
+            <div id="userLogin" class="active">
+                <form onsubmit="return handleUserLogin(event)">
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <input type="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>كلمة المرور</label>
+                        <input type="password" required>
+                    </div>
+                    <button type="submit" class="submit-btn">تسجيل الدخول</button>
+                </form>
+                <div class="guest-btn">
+                    <a href="#" onclick="handleGuestAccess()">الدخول كزائر</a>
+                </div>
+            </div>
+
+            <!-- نموذج تسجيل دخول المشرف -->
+            <div id="adminLogin">
+                <form onsubmit="return handleAdminLogin(event)">
+                    <div class="form-group">
+                        <label>اسم المستخدم</label>
+                        <input type="text" required>
+                    </div>
+                    <div class="form-group">
+                        <label>كلمة المرور</label>
+                        <input type="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label>رمز المشرف</label>
+                        <input type="password" required>
+                    </div>
+                    <button type="submit" class="submit-btn">دخول المشرف</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="social-icons">
+            <i class="fab fa-facebook"></i>
+            <i class="fab fa-twitter"></i>
+            <i class="fab fa-instagram"></i>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const forms = document.querySelectorAll('.form-container > div');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            forms.forEach(f => f.classList.remove('active'));
+
+            if (tab === 'user') {
+                document.querySelector('.tab-btn:first-child').classList.add('active');
+                document.getElementById('userLogin').classList.add('active');
+            } else {
+                document.querySelector('.tab-btn:last-child').classList.add('active');
+                document.getElementById('adminLogin').classList.add('active');
+            }
+        }
+
+        function handleUserLogin(event) {
+            event.preventDefault();
+            // هنا يتم إضافة منطق تسجيل دخول المستخدم
+            console.log('تسجيل دخول المستخدم');
+        }
+
+        function handleAdminLogin(event) {
+            event.preventDefault();
+            const adminCode = event.target.querySelector('input[type="password"]:last-child').value;
+            if (adminCode === 'BALCM') {
+                console.log('تم تسجيل دخول المشرف بنجاح');
+            } else {
+                alert('رمز المشرف غير صحيح');
+            }
+        }
+
+        function handleGuestAccess() {
+            console.log('الدخول كزائر');
+            // توجيه الزائر إلى الصفحة الرئيسية
+        }
+
+        // إضافة تأثيرات حركية للخلفية
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            document.querySelector('.background-animation').style.transform = 
+                `translate(${x * 30}px, ${y * 30}px)`;
+        });
+    </script>
+</body>
+</html>
